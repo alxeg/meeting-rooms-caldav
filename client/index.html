@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Meeting Rooms</title>
+    
+    <script id="tpl-room" type="text/x-jsrender">
+        <div class="room_container">
+            <div class="room_title">{{:title}}</div>
+            <div class="room_calendar" id="{{:id}}"></div>
+        </div>
+    </script>
+    <script id="tpl-loading" type="text/x-jsrender">
+        <div id="{{:id}}" class="cp-spinner cp-meter" style="position: absolute; left: {{:x}}px; top: {{:y}}px; z-index:999">
+        </div>
+    </script>
+    <script id="tpl-legend" type="text/x-jsrender">
+        <li>{{:title}}&nbsp;— {{:description}}.</li>
+    </script>
+
+    <script src='bundle.js'></script>
+        
+</head>
+
+<body>
+    <div id="meetings_holder">
+
+        <div class="room_container">
+            <h1 class="calendar-title">
+                <img
+                    src="logo.png">
+            </h1>
+            <ul id="cal_legend" class="calendar-legend">
+            </ul>
+            <div id='current-time'></div>
+        </div>
+    </div>
+</body>
+
+</html>
