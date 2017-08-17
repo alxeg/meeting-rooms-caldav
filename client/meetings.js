@@ -82,6 +82,10 @@ $(function() {
                 eventSources : [ {
                     url : '/api/calendar/' + room.id,
                     type : 'GET',
+                    eventDataTransform: event => {
+                        event.title = event.title.replace(/^mailto:/, '');
+                        return event;
+                    },
                     error: () => {
                         showLoading(calId, true);
                         $("#"+calId).oneTime("20s", function() {
