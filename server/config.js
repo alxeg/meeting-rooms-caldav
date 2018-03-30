@@ -6,6 +6,7 @@ const configPath = path.resolve(__dirname, '../', "server-config.json");
 const configData = JSON.parse(fs.readFileSync(configPath));
 
 const config = {
+    showTitle: configData.showTitle,
     port: configData.port,
 
     getRooms : () => {
