@@ -25,7 +25,7 @@
     "jsrender": "^0.9.87",
     "lodash": "^4.17.4",
     "pikaday": "^1.6.1",
-    "scrapegoat": "https://github.com/alxeg/scrapegoat/tarball/fixes-dates-organizer"
+    "scrapegoat": "git+https://github.com/alxeg/scrapegoat.git#fixes-dates-organizer"
   },
   "devDependencies": {
     "babel-cli": "^6.24.0",
