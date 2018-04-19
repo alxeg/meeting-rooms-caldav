@@ -94,6 +94,9 @@ $(function() {
                     },
                     success: function() {
                         showLoading(calId, false);
+                        let loaded = $("#"+calId).fullCalendar('getDate').stripTime().format("L");
+                        console.log("Succeeded retrieving for "+loaded)
+                        $("#select-date").val(loaded);
                     }
                 } ]
             };
@@ -108,7 +111,8 @@ $(function() {
                 } else {
                     cal.fullCalendar('refetchEvents');
                 }
-                $("#select-date").val("");
+                // console.log(cal.fullCalendar('getDate').stripTime());
+                // $("#select-date").val(cal.fullCalendar('getDate').stripTime());
             });
             $("#cal_legend").append($($.templates("#tpl-legend").render(opts.room_data)));
 
