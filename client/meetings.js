@@ -25,7 +25,7 @@ $(function() {
             center : '',
             right : ''
         },
-        weekends : false,
+        weekends : true,
         editable : false,
         defaultView : 'agendaDay',
         allDaySlot : false,
