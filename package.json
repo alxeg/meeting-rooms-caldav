@@ -20,13 +20,17 @@
     },
     "dependencies": {
         "csspin": "^1.1.4",
-        "express": "^4.17.4",
+        "express": "^4.17.1",
         "fullcalendar": "^3.10.1",
+        "ical-expander": "^2.0.0",
+        "ical.js": "^1.3.0",
         "jquery": "^3.4.1",
         "jsrender": "^1.0.5",
         "lodash": "^4.17.15",
+        "moment": "^2.24.0",
+        "moment-timezone": "^0.5.27",
         "pikaday": "^1.8.0",
-        "scrapegoat": "git+https://github.com/alxeg/scrapegoat.git#fixes-dates-organizer"
+        "scrapegoat": "git+https://github.com/alxeg/scrapegoat.git#attempt-to-use-tz-detection"
     },
     "devDependencies": {
         "babel-cli": "^6.26.0",
