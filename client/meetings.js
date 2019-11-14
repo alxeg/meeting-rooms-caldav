@@ -103,6 +103,7 @@ $(function() {
                                     return response.json();
                                 })
                                 .then(events => {
+                                    showLoading(calId, false);
                                     events.forEach(ev => {
                                         ev.title = ev.title.replace(/^mailto:/, '');
                                     })
