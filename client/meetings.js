@@ -3,20 +3,28 @@ import moment from 'moment';
 
 import $ from 'jquery';
 
-import 'fullcalendar';
-import 'fullcalendar/dist/locale/ru';
 import Pikaday from 'pikaday/pikaday';
 
 import 'jsrender';
 import './jquery.timers.min';
 
-import 'fullcalendar/dist/fullcalendar.css';
+import '@fullcalendar/core/main.css';
+import '@fullcalendar/timegrid/main.css';
+
+import ruLocale from '@fullcalendar/core/locales/ru';
+
+import { Calendar } from '@fullcalendar/core';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import momentPlugin, { toMoment } from '@fullcalendar/moment';
+
 import 'csspin/csspin.css';
 import 'pikaday/css/pikaday.css';
 
 import './meetings.css';
 
 import './logo.png';
+
+const calendars = {};
 
 $(function() {
     let calOptions = {
@@ -27,22 +35,25 @@ $(function() {
         },
         weekends : true,
         editable : false,
-        defaultView : 'agendaDay',
+        defaultView : 'timeGridDay',
         allDaySlot : false,
-        locale : 'ru',
+        locales : [ ruLocale ],
         minTime : '10:00',
         maxTime : '21:00',
         height : 737,
         displayEventEnd : true,
         nowIndicator: true,
-        timezone: 'local'
+        timezone: 'local',
+        plugins: [ timeGridPlugin, momentPlugin ]
     };
 
-    let dateSelector = new Pikaday({
+    const dateSelector = new Pikaday({
          field: $('#select-date')[0],
          format: "L",
          onSelect: (date) => {
-            $('.room_calendar').fullCalendar('gotoDate', date);
+             Object.keys(calendars).forEach(calId => {
+                 calendars[calId].gotoDate(date);
+             });
          }
     });
 
@@ -65,6 +76,7 @@ $(function() {
     }
 
     $.get('/api/rooms', function(data) {
+
         $.each(data, (idx, room) => {
             let calId = 'cal_' + room.id;
             let callLoadingError = (id, status) => {
@@ -79,41 +91,55 @@ $(function() {
                     description : room.description
                 },
 
-                eventSources : [ {
-                    url : '/api/calendar/' + room.id,
-                    type : 'GET',
-                    eventDataTransform: event => {
-                        event.title = event.title.replace(/^mailto:/, '');
-                        return event;
-                    },
-                    error: () => {
-                        showLoading(calId, true);
-                        $("#"+calId).oneTime("20s", function() {
-                            $(this).fullCalendar('refetchEvents');
-                        });
-                    },
-                    success: function() {
-                        showLoading(calId, false);
-                        let loaded = $("#"+calId).fullCalendar('getDate').stripTime().format("L");
-                        console.log("Succeeded retrieving for "+loaded)
-                        $("#select-date").val(loaded);
+                eventSources : [
+                    ( fetchInfo, successCallback, failureCallback ) => {
+                        return fetch('/api/calendar/' + room.id +
+                            "?start="+moment(fetchInfo.start).toISOString()+
+                            "&end="+moment(fetchInfo.end).toISOString())
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Failed to fetch data');
+                                    }
+                                    return response.json();
+                                })
+                                .then(events => {
+                                    events.forEach(ev => {
+                                        ev.title = ev.title.replace(/^mailto:/, '');
+                                    })
+                                    successCallback(events);
+                                    return events;
+
+                                })
+                                .catch(err => {
+                                    showLoading(calId, true);
+                                    $("#"+calId).oneTime("20s", () => {
+                                        calendars[calId].refetchEvents();
+                                    });
+                                    failureCallback(err);
+                                });
                     }
-                } ]
+            ]
             };
 
             $.extend(opts, calOptions);
 
             $("#meetings_holder").append($($.templates("#tpl-room").render(opts.room_data)));
-            $("#" + calId).fullCalendar(opts).everyTime("60s", function() {
-                let cal = $(this);
-                if (!cal.fullCalendar('getDate').stripTime().isSame(moment().stripTime())) {
-                    cal.fullCalendar('today');
+
+            const calend = new Calendar($("#" + calId).get(0), opts);
+            calendars[calId] = calend;
+
+            $("#" + calId).everyTime("60s", () => {
+                const date = toMoment(calend.getDate(), calend);
+                if (!date.startOf('day').isSame(moment().startOf('day'))) {
+                    calend.today();
                 } else {
-                    cal.fullCalendar('refetchEvents');
+                    calend.refetchEvents();
+                    dateSelector.setDate(date.startOf('day').format("L"));
                 }
-                // console.log(cal.fullCalendar('getDate').stripTime());
-                // $("#select-date").val(cal.fullCalendar('getDate').stripTime());
+                $('#select-date').val(date.startOf('day').format("L"));
             });
+
+            calend.render();
             $("#cal_legend").append($($.templates("#tpl-legend").render(opts.room_data)));
 
         });

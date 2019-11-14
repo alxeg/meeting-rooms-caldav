@@ -1,7 +1,7 @@
 import express from 'express';
 
 import Scrapegoat from 'scrapegoat';
-import moment from 'moment';
+import moment from 'moment-timezone';
 import {uniqWith, isEqual} from 'lodash';
 
 const app = express();
