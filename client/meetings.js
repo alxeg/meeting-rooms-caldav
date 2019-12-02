@@ -135,9 +135,8 @@ $(function() {
                     calend.today();
                 } else {
                     calend.refetchEvents();
-                    dateSelector.setDate(date.startOf('day').format("L"));
                 }
-                $('#select-date').val(date.startOf('day').format("L"));
+                $('#select-date').val('');
             });
 
             calend.render();
