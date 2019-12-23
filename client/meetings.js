@@ -94,8 +94,8 @@ $(function() {
                 eventSources : [
                     ( fetchInfo, successCallback, failureCallback ) => {
                         return fetch('/api/calendar/' + room.id +
-                            "?start="+moment(fetchInfo.start).toISOString()+
-                            "&end="+moment(fetchInfo.end).toISOString())
+                            "?start="+encodeURIComponent(moment(fetchInfo.start).format())+
+                            "&end="+encodeURIComponent(moment(fetchInfo.end).format()))
                                 .then(response => {
                                     if (!response.ok) {
                                         throw new Error('Failed to fetch data');

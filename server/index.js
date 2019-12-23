@@ -14,8 +14,8 @@ app.get('/api/rooms',  (req, res) => {
 
 app.get('/api/calendar/:roomId', (req, res) => {
     let roomId = req.params.roomId;
-    const start = moment(req.query.start).format("YYYYMMDD[T]HHmmss[Z]");
-    const end = moment(req.query.end).format("YYYYMMDD[T]HHmmss[Z]");
+    const start = moment(req.query.start).utc().format("YYYYMMDD[T]HHmmss[Z]");
+    const end = moment(req.query.end).utc().format("YYYYMMDD[T]HHmmss[Z]");
 
     config.getRoom(roomId).caldav.getEventsByTime(start, end).then(events => {
         let result = events.map(event => {
