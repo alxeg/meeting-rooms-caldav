@@ -67,6 +67,7 @@ body {
 @-moz-document url-prefix() {
    .room_container {
       display: table;
+      max-width: 25%;
    }
 }
 
