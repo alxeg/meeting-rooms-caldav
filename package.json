@@ -30,7 +30,7 @@
         "jsrender": "^1.0.5",
         "lodash": "^4.17.15",
         "moment": "^2.24.0",
-        "moment-timezone": "^0.5.27",
+        "moment-timezone": "^0.5.35",
         "pikaday": "^1.8.0",
         "scrapegoat": "git+https://github.com/alxeg/scrapegoat.git#attempt-to-use-tz-detection"
     },
