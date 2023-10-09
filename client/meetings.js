@@ -14,8 +14,8 @@ import '@fullcalendar/timegrid/main.css';
 import ruLocale from '@fullcalendar/core/locales/ru';
 
 import { Calendar } from '@fullcalendar/core';
-import timeGridPlugin from '@fullcalendar/timegrid';
 import momentPlugin, { toMoment } from '@fullcalendar/moment';
+import timeGridPlugin from '@fullcalendar/timegrid';
 
 import 'csspin/csspin.css';
 import 'pikaday/css/pikaday.css';
@@ -23,6 +23,9 @@ import 'pikaday/css/pikaday.css';
 import './meetings.css';
 
 import './logo.png';
+
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
 
 const calendars = {};
 
@@ -44,7 +47,12 @@ $(function() {
         displayEventEnd : true,
         nowIndicator: true,
         timezone: 'local',
-        plugins: [ timeGridPlugin, momentPlugin ]
+        plugins: [ timeGridPlugin, momentPlugin ],
+        eventRender: (info) => {
+            tippy(info.el, {
+                content: info.event.title
+            });
+        }
     };
 
     const dateSelector = new Pikaday({
