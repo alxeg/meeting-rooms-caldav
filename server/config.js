@@ -27,7 +27,8 @@ const config = {
                     user: room.login,
                     pass: room.password
                 },
-                uri: configData.baseUrl + room.login + "/" + room.calendarId
+                uri: configData.baseUrl + room.login + "/" + room.calendarId,
+                timeout: configData.timeout ? configData.timeout : 10000
             });
             room.caldav = scapegoat;
         }
