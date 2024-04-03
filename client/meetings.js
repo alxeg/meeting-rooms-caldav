@@ -138,13 +138,15 @@ $(function() {
             calendars[calId] = calend;
 
             $("#" + calId).everyTime("60s", () => {
-                const date = toMoment(calend.getDate(), calend);
-                if (!date.startOf('day').isSame(moment().startOf('day'))) {
-                    calend.today();
-                } else {
-                    calend.refetchEvents();
+                if ( $("#auto-refresh").is(":checked") ) {
+                    const date = toMoment(calend.getDate(), calend);
+                    if (!date.startOf('day').isSame(moment().startOf('day'))) {
+                        calend.today();
+                    } else {
+                        calend.refetchEvents();
+                    }
+                    $('#select-date').val('');
                 }
-                $('#select-date').val('');
             });
 
             calend.render();

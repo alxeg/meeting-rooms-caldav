@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <title>Meeting Rooms</title>
-    
+
     <script id="tpl-room" type="text/x-jsrender">
         <div class="room_container">
             <div class="room_title">{{:title}}</div>
@@ -20,7 +20,7 @@
     </script>
 
     <script src='bundle.js'></script>
-        
+
 </head>
 
 <body>
@@ -34,7 +34,8 @@
             <ul id="cal_legend" class="calendar-legend">
             </ul>
             <div id='current-time'></div>
-            <input style="font-size:15px;" type="text" id='select-date'></input>
+            <input style="font-size:15px;" type="text" autocomplete="off" autofill="off" id='select-date'></input>
+            <input type="checkbox" id="auto-refresh" checked>Auto Refresh</div>
         </div>
     </div>
 </body>
