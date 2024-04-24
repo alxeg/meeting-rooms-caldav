@@ -1,8 +1,7 @@
 import express from 'express';
 
-import Scrapegoat from 'scrapegoat';
+import { isEqual, uniqWith } from 'lodash';
 import moment from 'moment-timezone';
-import {uniqWith, isEqual} from 'lodash';
 
 const app = express();
 const config = require('./config');
@@ -28,6 +27,11 @@ app.get('/api/calendar/:roomId', (req, res) => {
         });
         result = uniqWith(result, isEqual);
         res.send(result);
+    }, err => {
+        res.status(500);
+        res.send({
+            error: "failed to fetch calendar for " +  roomId + ". Error: " + err.message
+        })
     });
 });
 
