@@ -112,6 +112,7 @@ $(function() {
                                 })
                                 .then(events => {
                                     showLoading(calId, false);
+                                    calendars[calId].failed = false;
                                     events.forEach(ev => {
                                         ev.title = ev.title.replace(/^mailto:/, '');
                                     })
@@ -121,7 +122,8 @@ $(function() {
                                 })
                                 .catch(err => {
                                     showLoading(calId, true);
-                                    $("#"+calId).oneTime("20s", () => {
+                                    calendars[calId].failed = true;
+                                    $("#"+calId).oneTime("120s", () => {
                                         calendars[calId].refetchEvents();
                                     });
                                     failureCallback(err);
@@ -138,7 +140,7 @@ $(function() {
             calendars[calId] = calend;
 
             $("#" + calId).everyTime("60s", () => {
-                if ( $("#auto-refresh").is(":checked") ) {
+                if ( $("#auto-refresh").is(":checked") && !calend.failed) {
                     const date = toMoment(calend.getDate(), calend);
                     if (!date.startOf('day').isSame(moment().startOf('day'))) {
                         calend.today();

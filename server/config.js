@@ -21,7 +21,7 @@ const config = {
 
     getRoom : (id) => {
         let room = configData.rooms[id];
-        if (!room.hasOwnProperty('caldav')) {
+        if (room && !room.hasOwnProperty('caldav')) {
             let scapegoat = new Scrapegoat({
                 auth: {
                     user: room.login,
