@@ -18,14 +18,23 @@ app.get('/api/calendar/:roomId', (req, res) => {
     if (config.getRoom(roomId) && config.getRoom(roomId).caldav) {
         config.getRoom(roomId).caldav.getEventsByTime(start, end)
             .then(events => {
-                let result = events.map(event => {
-                    return {
-                        title: config.showTitle? event.data.title : event.data.organizer,
-                        subject: event.data.organizer,
-                        start: moment(event.data.start).format(),
-                        end: moment(event.data.end).format()
-                    };
-                });
+                let result = events.
+                    filter(event => {
+                        if (event.data.attendies && event.data.attendies["DECLINED"]) {
+                            return !event.data.attendies["DECLINED"].has("mailto:"+config.getRoom(roomId).login.toLowerCase())
+                        } else {
+                            return true
+                        }
+                    }).
+                    map(event => {
+                        return {
+                            title: config.showTitle? event.data.title : event.data.organizer,
+                            subject: event.data.organizer,
+                            start: moment(event.data.start).format(),
+                            end: moment(event.data.end).format()
+                        };
+                    });
+
                 result = uniqWith(result, isEqual);
                 res.send(result);
             })
